@@ -1,0 +1,47 @@
+name: Gerar APK do Modificador de Voz
+
+on:
+  push:
+    branches:
+      - main # Dispara a construção toda vez que você atualizar o código
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Passo 1 - Baixar o código do repositório
+        uses: actions/checkout@v4
+
+      - name: Passo 2 - Instalar o Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-size: 20
+
+      - name: Passo 3 - Instalar o Java (Necessário para Android)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Passo 4 - Instalar as bibliotecas do App
+        run: npm install
+
+      - name: Passo 5 - Instalar a ferramenta Expo CLI globalmente
+        run: npm install -g eas-cli
+
+      # Nota: Para gerar o APK final sem travar em telas de login, o robô do GitHub
+      # faz o pré-preparo dos arquivos nativos do Android antes da compilação.
+      - name: Passo 6 - Preparar arquivos nativos do Android
+        run: npx expo prebuild --platform android
+
+      - name: Passo 7 - Compilar e Gerar o arquivo APK
+        run: |
+          cd android
+          ./gradlew assembleRelease
+
+      - name: Passo 8 - Disponibilizar o APK para Download
+        uses: actions/upload-artifact@v4
+        with:
+          name: aplicativo-modificador-de-voz
+          path: android/app/build/outputs/apk/release/app-release.apk
