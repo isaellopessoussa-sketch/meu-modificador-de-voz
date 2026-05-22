@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "VoiceModMobile",
+    "slug": "voicemod-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Este aplicativo precisa de acesso ao microfone para modificar sua voz."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#121212"
+      },
+      "permissions": [
+        "RECORD_AUDIO"
+      ]
+    }
+  }
+}
